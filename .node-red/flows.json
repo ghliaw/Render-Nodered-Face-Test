@@ -1,0 +1,259 @@
+[
+    {
+        "id": "5c7c5ff0.8cf32",
+        "type": "tab",
+        "label": "Face Recognition Test",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "5d40640b.42396c",
+        "type": "ui_webcam",
+        "z": "5c7c5ff0.8cf32",
+        "name": "",
+        "group": "deabafe.d24035",
+        "order": 1,
+        "width": 6,
+        "height": 6,
+        "countdown": false,
+        "autoStart": true,
+        "hideCaptureButton": false,
+        "showImage": "2",
+        "mirror": true,
+        "format": "jpeg",
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "40084549.9c60ec",
+                "c80ee392.805c",
+                "9ef9e815.3ed8d8"
+            ]
+        ]
+    },
+    {
+        "id": "1f15b262.abecbe",
+        "type": "debug",
+        "z": "5c7c5ff0.8cf32",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "443c74d2.c4fb5c",
+        "type": "Face",
+        "z": "5c7c5ff0.8cf32",
+        "name": "",
+        "x": 550,
+        "y": 120,
+        "wires": [
+            [
+                "5ee5bd33.bc7554",
+                "1a718497.28a06b"
+            ]
+        ]
+    },
+    {
+        "id": "40084549.9c60ec",
+        "type": "Computer Vision",
+        "z": "5c7c5ff0.8cf32",
+        "operation": "description",
+        "name": "",
+        "x": 340,
+        "y": 240,
+        "wires": [
+            [
+                "1f15b262.abecbe",
+                "3ad4d47b.5c19bc"
+            ]
+        ]
+    },
+    {
+        "id": "e2ae1df0.34716",
+        "type": "ui_media",
+        "z": "5c7c5ff0.8cf32",
+        "group": "ab292792.ae0c58",
+        "name": "",
+        "width": 6,
+        "height": 6,
+        "order": 1,
+        "category": "",
+        "file": "",
+        "layout": "expand",
+        "showcontrols": true,
+        "loop": true,
+        "onstart": false,
+        "scope": "local",
+        "tooltip": "",
+        "x": 1270,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5ee5bd33.bc7554",
+        "type": "debug",
+        "z": "5c7c5ff0.8cf32",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "b9164146.05416",
+        "type": "annotate-image",
+        "z": "5c7c5ff0.8cf32",
+        "name": "",
+        "fill": "",
+        "stroke": "#ffC000",
+        "lineWidth": 5,
+        "fontSize": 24,
+        "fontColor": "#ffC000",
+        "x": 940,
+        "y": 120,
+        "wires": [
+            [
+                "d247d6a3.724248"
+            ]
+        ]
+    },
+    {
+        "id": "c80ee392.805c",
+        "type": "function",
+        "z": "5c7c5ff0.8cf32",
+        "name": "set MIME",
+        "func": "msg.mimetype=\"image/jpeg\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "e2ae1df0.34716"
+            ]
+        ]
+    },
+    {
+        "id": "3ad4d47b.5c19bc",
+        "type": "ui_text",
+        "z": "5c7c5ff0.8cf32",
+        "group": "ab292792.ae0c58",
+        "order": 2,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 670,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "9ef9e815.3ed8d8",
+        "type": "function",
+        "z": "5c7c5ff0.8cf32",
+        "name": "backup picture",
+        "func": "flow.set(\"backup_image\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "443c74d2.c4fb5c"
+            ]
+        ]
+    },
+    {
+        "id": "1a718497.28a06b",
+        "type": "function",
+        "z": "5c7c5ff0.8cf32",
+        "name": "mark face position",
+        "func": " msg.annotations = [ {\n    type: \"rect\",\n    x: msg.payload.left, \n    y: msg.payload.top, \n    w: msg.payload.width, \n    h: msg.payload.height,\n}];\nmsg.payload = flow.get('backup_image');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 120,
+        "wires": [
+            [
+                "b9164146.05416"
+            ]
+        ]
+    },
+    {
+        "id": "d247d6a3.724248",
+        "type": "function",
+        "z": "5c7c5ff0.8cf32",
+        "name": "set MIME",
+        "func": "msg.mimetype=\"image/jpeg\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 120,
+        "wires": [
+            [
+                "e2ae1df0.34716"
+            ]
+        ]
+    },
+    {
+        "id": "deabafe.d24035",
+        "type": "ui_group",
+        "name": "Take a picture",
+        "tab": "9e253195.a496a",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false
+    },
+    {
+        "id": "ab292792.ae0c58",
+        "type": "ui_group",
+        "name": "Recognition Result",
+        "tab": "9e253195.a496a",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "9e253195.a496a",
+        "type": "ui_tab",
+        "name": "Face Recognition Test",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]
